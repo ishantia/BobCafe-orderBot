@@ -821,7 +821,7 @@ body.no-scroll { overflow: hidden; }
   opacity: 1;
   transform: translateY(0) scale(1);
   pointer-events: auto;
-  position: relative;
+  position: fixed;
 }
 .fab--cart[hidden] { display: none !important; }
 
