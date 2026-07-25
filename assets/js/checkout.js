@@ -95,8 +95,21 @@
       </div>
 
       <div class="order-status-bar" id="orderStatusBar" hidden>
-        <span class="order-status-bar__number" id="statusBarNumber"></span>
-        <span class="order-status-bar__label" id="statusBarLabel"></span>
+        <div class="order-status-bar__main">
+          <span class="order-status-bar__number" id="statusBarNumber"></span>
+          <span class="order-status-bar__label" id="statusBarLabel"></span>
+        </div>
+        <p class="order-status-bar__reason" id="statusBarReason" hidden></p>
+      </div>
+
+      <div class="ready-overlay" id="readyOverlay" hidden role="alertdialog" aria-live="assertive" aria-labelledby="readyOverlayTitle">
+        <div class="ready-overlay__card">
+          <div class="ready-overlay__icon" aria-hidden="true">☕</div>
+          <h2 class="ready-overlay__title" id="readyOverlayTitle">سفارش شما آماده است!</h2>
+          <p class="ready-overlay__order" id="readyOverlayOrder"></p>
+          <p class="ready-overlay__hint">لطفاً برای دریافت سفارش به کانتر مراجعه کنید.</p>
+          <button class="btn btn--primary ready-overlay__dismiss" id="readyOverlayDismiss" type="button">متوجه شدم</button>
+        </div>
       </div>`;
     document.body.appendChild(wrap);
   }
@@ -259,13 +272,50 @@
     try { localStorage.removeItem(LAST_ORDER_KEY); } catch (e) { /* ignore */ }
   }
 
-  function updateStatusBar(orderNumber, status) {
+  const READY_SHOWN_KEY_PREFIX = "bobcafe:readyShown:";
+
+  function hasShownReadyAlert(orderNumber) {
+    try {
+      return localStorage.getItem(READY_SHOWN_KEY_PREFIX + orderNumber) === "1";
+    } catch (e) {
+      return false;
+    }
+  }
+  function markReadyAlertShown(orderNumber) {
+    try {
+      localStorage.setItem(READY_SHOWN_KEY_PREFIX + orderNumber, "1");
+    } catch (e) { /* ignore */ }
+  }
+
+  function showReadyCelebration(orderNumber) {
+    document.getElementById("readyOverlayOrder").textContent = `سفارش #${toPersianDigitsOnly(orderNumber)}`;
+    const overlay = document.getElementById("readyOverlay");
+    overlay.hidden = false;
+    document.body.classList.add("no-scroll");
+    // Best-effort attention nudge — silently ignored where unsupported.
+    try { navigator.vibrate?.([160, 80, 160]); } catch (e) { /* ignore */ }
+  }
+
+  function closeReadyCelebration() {
+    document.getElementById("readyOverlay").hidden = true;
+    document.body.classList.remove("no-scroll");
+  }
+
+  function updateStatusBar(orderNumber, status, cancelReason) {
     const bar = document.getElementById("orderStatusBar");
+    const reasonEl = document.getElementById("statusBarReason");
     document.getElementById("statusBarNumber").textContent = `#${toPersianDigitsOnly(orderNumber)}`;
     document.getElementById("statusBarLabel").textContent = STATUS_LABELS[status] || STATUS_LABELS.pending;
     bar.hidden = false;
     bar.classList.toggle("is-done", status === "ready" || status === "cancelled");
     document.body.classList.add("has-status-bar");
+
+    if (status === "cancelled" && cancelReason) {
+      reasonEl.textContent = `دلیل: ${cancelReason}`;
+      reasonEl.hidden = false;
+    } else {
+      reasonEl.hidden = true;
+    }
   }
 
   function hideStatusBar() {
@@ -285,7 +335,13 @@
       }
       if (!res.ok) return; // transient network/server error — try again next tick
       const data = await res.json();
-      updateStatusBar(orderNumber, data.status);
+      updateStatusBar(orderNumber, data.status, data.cancelReason);
+
+      if (data.status === "ready" && !hasShownReadyAlert(orderNumber)) {
+        showReadyCelebration(orderNumber);
+        markReadyAlertShown(orderNumber);
+      }
+
       if (data.status === "ready" || data.status === "cancelled") {
         stopPolling();
       }
@@ -327,10 +383,16 @@
       if (e.target.id === "confirmOverlay") closeConfirm();
     });
 
+    document.getElementById("readyOverlayDismiss").addEventListener("click", closeReadyCelebration);
+    document.getElementById("readyOverlay").addEventListener("click", (e) => {
+      if (e.target.id === "readyOverlay") closeReadyCelebration();
+    });
+
     document.addEventListener("keydown", (e) => {
       if (e.key !== "Escape") return;
       if (!document.getElementById("checkoutOverlay").hidden) closeCheckout();
       if (!document.getElementById("confirmOverlay").hidden) closeConfirm();
+      if (!document.getElementById("readyOverlay").hidden) closeReadyCelebration();
     });
   }
 
