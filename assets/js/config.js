@@ -4,5 +4,5 @@
    (e.g. "https://bobcafe-api.yourname.workers.dev", no trailing slash).
    ========================================================================== */
 window.BOBCAFE_CONFIG = {
-  API_BASE: "https://bobcafe-api.YOUR-SUBDOMAIN.workers.dev",
+  API_BASE: "https://bobcafe-api.itshantia.workers.dev",
 };
