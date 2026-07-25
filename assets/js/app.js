@@ -337,7 +337,17 @@
     });
   }
 
+  // Every card that adds a cart-quantity control also subscribes to cart
+  // changes so it can re-render its own button/stepper. Since renderGrid()
+  // wipes and rebuilds the whole grid on every search/filter, those old
+  // subscriptions must be torn down each time — otherwise they'd pile up
+  // forever, quietly leaking a listener per card on every re-render.
+  let cartUnsubscribers = [];
+
   function renderGrid() {
+    cartUnsubscribers.forEach((unsub) => unsub());
+    cartUnsubscribers = [];
+
     const filtered = getFilteredItems();
     dom.menuGrid.innerHTML = "";
 
@@ -431,7 +441,8 @@
     if (canAddToCart && window.Cart) {
       const qtyHost = card.querySelector(".card__qty");
       renderQtyControl(qtyHost, cartKey, item);
-      window.Cart.subscribe(() => renderQtyControl(qtyHost, cartKey, item));
+      const unsubscribe = window.Cart.subscribe(() => renderQtyControl(qtyHost, cartKey, item));
+      cartUnsubscribers.push(unsubscribe);
     }
 
     return card;
@@ -439,9 +450,13 @@
 
   /** Render either a round "+" add button, or a −/count/+ stepper,
    *  inside the given host element — matching the existing .card__mark
-   *  pill styling so no new visual language is introduced. */
+   *  pill styling so no new visual language is introduced.
+   *  Note: this also runs once *before* the card is inserted into the
+   *  document (its first, synchronous call from createCard), so it must
+   *  not require `host.isConnected` — only skip if the host is missing
+   *  entirely (e.g. a stale closure from a card that no longer exists). */
   function renderQtyControl(host, cartKey, item) {
-    if (!host || !host.isConnected) return;
+    if (!host) return;
     const qty = window.Cart.getQty(cartKey);
 
     if (qty <= 0) {
