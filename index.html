@@ -1,129 +1,234 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fa" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>باب‌کافه | منوی دیجیتال</title>
-  <meta name="description" content="منوی آنلاین باب‌کافه — قهوه، نوشیدنی، کیک و دسرهای دست‌ساز">
-  <meta name="theme-color" content="#55704A">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>باب‌کافه | منوی دیجیتال</title>
+    <meta
+      name="description"
+      content="منوی آنلاین باب‌کافه — قهوه، نوشیدنی، کیک و دسرهای دست‌ساز"
+    />
+    <meta name="theme-color" content="#55704A" />
 
-  <script>
-    (function () {
-      try {
-        var saved = localStorage.getItem("bobcafe:theme");
-        document.documentElement.setAttribute("data-theme", saved === "dark" ? "dark" : "light");
-      } catch (e) {
-        document.documentElement.setAttribute("data-theme", "light");
-      }
-    })();
-  </script>
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem("bobcafe:theme");
+          document.documentElement.setAttribute(
+            "data-theme",
+            saved === "dark" ? "dark" : "light",
+          );
+        } catch (e) {
+          document.documentElement.setAttribute("data-theme", "light");
+        }
+      })();
+    </script>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
 
-  <link rel="icon" href="assets/images/logo.webp" type="image/svg+xml">
-  <link rel="stylesheet" href="assets/css/style.css">
-</head>
-<body>
+    <link rel="icon" href="assets/images/logo.webp" type="image/svg+xml" />
+    <link rel="stylesheet" href="assets/css/style.css" />
+  </head>
+  <body>
+    <!-- Skip link for keyboard/screen-reader users -->
+    <a class="skip-link" href="#menu-grid">رفتن به منو</a>
 
-  <!-- Skip link for keyboard/screen-reader users -->
-  <a class="skip-link" href="#menu-grid">رفتن به منو</a>
+    <!-- ===================== HERO ===================== -->
+    <header class="hero" id="top">
+      <div class="hero__backdrop" aria-hidden="true">
+        <div class="hero__steam s1"></div>
+        <div class="hero__steam s2"></div>
+        <div class="hero__steam s3"></div>
+      </div>
 
-  <!-- ===================== HERO ===================== -->
-  <header class="hero" id="top">
-    <div class="hero__backdrop" aria-hidden="true">
-      <div class="hero__steam s1"></div>
-      <div class="hero__steam s2"></div>
-      <div class="hero__steam s3"></div>
-    </div>
+      <div class="hero__content">
+        <img
+          class="hero__logo"
+          src="assets/images/logo.webp"
+          alt="نشان باب‌کافه"
+          width="88"
+          height="88"
+        />
+        <p class="hero__eyebrow">خوش آمدید به</p>
+        <h1 class="hero__title">
+          باب <span class="hero__title-accent">کافه</span>
+        </h1>
+        <p class="hero__subtitle">جایی برای مکث؛ یک فنجان قهوه، یک لحظه آرام</p>
+      </div>
 
-    <div class="hero__content">
-      <img class="hero__logo" src="assets/images/logo.webp" alt="نشان باب‌کافه" width="88" height="88">
-      <p class="hero__eyebrow">خوش آمدید به</p>
-      <h1 class="hero__title">باب <span class="hero__title-accent">کافه</span></h1>
-      <p class="hero__subtitle">جایی برای مکث؛ یک فنجان قهوه، یک لحظه آرام</p>
-    </div>
+      <button
+        class="theme-toggle"
+        id="themeToggle"
+        type="button"
+        aria-label="تغییر حالت روشن و تاریک"
+        aria-pressed="false"
+      >
+        <svg
+          class="icon-sun"
+          viewBox="0 0 24 24"
+          width="20"
+          height="20"
+          aria-hidden="true"
+        >
+          <circle cx="12" cy="12" r="4.5" />
+          <path
+            d="M12 2v2.2M12 19.8V22M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2 12h2.2M19.8 12H22M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"
+            stroke-linecap="round"
+          />
+        </svg>
+        <svg
+          class="icon-moon"
+          viewBox="0 0 24 24"
+          width="20"
+          height="20"
+          aria-hidden="true"
+        >
+          <path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z" />
+        </svg>
+      </button>
+    </header>
 
-    <button class="theme-toggle" id="themeToggle" type="button" aria-label="تغییر حالت روشن و تاریک" aria-pressed="false">
-      <svg class="icon-sun" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.2M12 19.8V22M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2 12h2.2M19.8 12H22M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6" stroke-linecap="round"/></svg>
-      <svg class="icon-moon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"/></svg>
+    <!-- ===================== STICKY SEARCH + FILTERS ===================== -->
+    <nav class="controls" id="controls" aria-label="جستجو و فیلتر منو">
+      <div class="search-bar">
+        <svg
+          class="search-bar__icon"
+          viewBox="0 0 24 24"
+          width="18"
+          height="18"
+          aria-hidden="true"
+        >
+          <circle cx="11" cy="11" r="7" />
+          <path d="M20 20l-3.5-3.5" stroke-linecap="round" />
+        </svg>
+        <input
+          type="search"
+          id="searchInput"
+          class="search-bar__input"
+          placeholder="جستجو در منو… مثلاً «لاته»"
+          aria-label="جستجو در منو"
+          autocomplete="off"
+        />
+        <button
+          class="search-bar__clear"
+          id="searchClear"
+          type="button"
+          aria-label="پاک کردن جستجو"
+          hidden
+        >
+          &times;
+        </button>
+      </div>
+
+      <div
+        class="chips"
+        id="categoryChips"
+        role="tablist"
+        aria-label="دسته‌بندی‌ها"
+      >
+        <!-- category chips injected by app.js -->
+      </div>
+    </nav>
+
+    <!-- ===================== MAIN ===================== -->
+    <main class="main" id="main">
+      <!-- Loading skeleton -->
+      <section class="skeleton-grid" id="skeletonGrid" aria-hidden="true">
+        <!-- skeleton cards injected by app.js -->
+      </section>
+
+      <!-- Error state -->
+      <section class="state-panel" id="errorState" hidden>
+        <div class="state-panel__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="40" height="40">
+            <path
+              d="M12 9v5M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"
+            />
+          </svg>
+        </div>
+        <h2 class="state-panel__title">منو در دسترس نیست</h2>
+        <p class="state-panel__text" id="errorMessage">
+          مشکلی در بارگذاری منو پیش آمد. لطفاً دوباره تلاش کنید.
+        </p>
+        <button class="btn btn--primary" id="retryButton" type="button">
+          تلاش مجدد
+        </button>
+      </section>
+
+      <!-- Empty search state -->
+      <section class="state-panel" id="emptyState" hidden>
+        <div class="state-panel__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="40" height="40">
+            <circle cx="11" cy="11" r="7" />
+            <path d="M20 20l-3.5-3.5" stroke-linecap="round" />
+            <path d="M8 11h6" stroke-linecap="round" />
+          </svg>
+        </div>
+        <h2 class="state-panel__title">نتیجه‌ای پیدا نشد</h2>
+        <p class="state-panel__text">
+          موردی با این مشخصات در منو وجود ندارد. جستجوی دیگری را امتحان کنید.
+        </p>
+        <button class="btn btn--ghost" id="resetFilters" type="button">
+          پاک کردن فیلترها
+        </button>
+      </section>
+
+      <!-- Menu grid -->
+      <section class="menu-grid" id="menuGrid" aria-live="polite" hidden>
+        <!-- menu cards injected by app.js -->
+      </section>
+
+      <p class="result-count" id="resultCount" aria-live="polite"></p>
+    </main>
+
+    <!-- ===================== FOOTER ===================== -->
+    <footer class="footer">
+      <div class="footer__brand">
+        <img
+          src="assets/images/logo.webp"
+          alt=""
+          width="40"
+          height="40"
+          aria-hidden="true"
+        />
+        <span>باب‌کافه</span>
+      </div>
+      <p class="footer__text">
+        هر روز، از ساعت 7 صبح تا ۱۱ شب پذیرای شما هستیم
+      </p>
+      <p class="footer__copy">
+        © <span id="footerYear"></span> باب‌کافه — تمام حقوق محفوظ است
+      </p>
+    </footer>
+
+    <!-- Back to top -->
+    <button
+      class="fab fab--top"
+      id="backToTop"
+      type="button"
+      aria-label="بازگشت به بالا"
+      hidden
+    >
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+        <path
+          d="M12 19V5M5 12l7-7 7 7"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
     </button>
-  </header>
 
-  <!-- ===================== STICKY SEARCH + FILTERS ===================== -->
-  <nav class="controls" id="controls" aria-label="جستجو و فیلتر منو">
-    <div class="search-bar">
-      <svg class="search-bar__icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5" stroke-linecap="round"/></svg>
-      <input
-        type="search"
-        id="searchInput"
-        class="search-bar__input"
-        placeholder="جستجو در منو… مثلاً «لاته»"
-        aria-label="جستجو در منو"
-        autocomplete="off">
-      <button class="search-bar__clear" id="searchClear" type="button" aria-label="پاک کردن جستجو" hidden>&times;</button>
-    </div>
-
-    <div class="chips" id="categoryChips" role="tablist" aria-label="دسته‌بندی‌ها">
-      <!-- category chips injected by app.js -->
-    </div>
-  </nav>
-
-  <!-- ===================== MAIN ===================== -->
-  <main class="main" id="main">
-
-    <!-- Loading skeleton -->
-    <section class="skeleton-grid" id="skeletonGrid" aria-hidden="true">
-      <!-- skeleton cards injected by app.js -->
-    </section>
-
-    <!-- Error state -->
-    <section class="state-panel" id="errorState" hidden>
-      <div class="state-panel__icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" width="40" height="40"><path d="M12 9v5M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
-      </div>
-      <h2 class="state-panel__title">منو در دسترس نیست</h2>
-      <p class="state-panel__text" id="errorMessage">مشکلی در بارگذاری منو پیش آمد. لطفاً دوباره تلاش کنید.</p>
-      <button class="btn btn--primary" id="retryButton" type="button">تلاش مجدد</button>
-    </section>
-
-    <!-- Empty search state -->
-    <section class="state-panel" id="emptyState" hidden>
-      <div class="state-panel__icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" width="40" height="40"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5" stroke-linecap="round"/><path d="M8 11h6" stroke-linecap="round"/></svg>
-      </div>
-      <h2 class="state-panel__title">نتیجه‌ای پیدا نشد</h2>
-      <p class="state-panel__text">موردی با این مشخصات در منو وجود ندارد. جستجوی دیگری را امتحان کنید.</p>
-      <button class="btn btn--ghost" id="resetFilters" type="button">پاک کردن فیلترها</button>
-    </section>
-
-    <!-- Menu grid -->
-    <section class="menu-grid" id="menuGrid" aria-live="polite" hidden>
-      <!-- menu cards injected by app.js -->
-    </section>
-
-    <p class="result-count" id="resultCount" aria-live="polite"></p>
-  </main>
-
-  <!-- ===================== FOOTER ===================== -->
-  <footer class="footer">
-    <div class="footer__brand">
-      <img src="assets/images/logo.webp" alt="" width="40" height="40" aria-hidden="true">
-      <span>باب‌کافه</span>
-    </div>
-    <p class="footer__text">هر روز، از ساعت 7 صبح تا ۱۱ شب پذیرای شما هستیم</p>
-    <p class="footer__copy">© <span id="footerYear"></span> باب‌کافه — تمام حقوق محفوظ است</p>
-  </footer>
-
-  <!-- Back to top -->
-  <button class="fab fab--top" id="backToTop" type="button" aria-label="بازگشت به بالا" hidden>
-    <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-  </button>
-
-  <script src="assets/js/config.js" defer></script>
-  <script src="assets/js/cart.js" defer></script>
-  <script src="assets/js/checkout.js" defer></script>
-  <script src="assets/js/app.js" defer></script>
-</body>
+    <script src="assets/js/config.js" defer></script>
+    <script src="assets/js/cart.js" defer></script>
+    <script src="assets/js/checkout.js" defer></script>
+    <script src="assets/js/app.js" defer></script>
+  </body>
 </html>
