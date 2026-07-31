@@ -66,26 +66,18 @@
 
   const ICON_PATHS = {
     all: '<rect x="3" y="3" width="7.5" height="7.5" rx="1.6"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.6"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.6"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.6"/>',
-    coffee:
-      '<path d="M4 8h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8Z"/><path d="M17 9.5h1.5a2.5 2.5 0 0 1 0 5H17"/><path d="M8 4.2c-1 1-1 1.6 0 2.6M11.5 4.2c-1 1-1 1.6 0 2.6"/>',
-    latte:
-      '<path d="M5 9h11v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V9Z"/><path d="M16 10h1.6a2.2 2.2 0 0 1 0 4.4H16"/><path d="M10.5 11.4c-1.3-1.3-3.1.4-1.6 1.9.8.8 1.6 1.5 1.6 1.5s.8-.7 1.6-1.5c1.5-1.5-.3-3.2-1.6-1.9Z"/>',
-    pourover:
-      '<path d="M6.5 4h11l-2 6h-7l-2-6Z"/><path d="M9 10v2.6a3 3 0 0 0 3 3h0a3 3 0 0 0 3-3V10"/><path d="M4.5 19.6h15"/><path d="M12 15.6v4"/>',
+    coffee: '<path d="M4 8h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8Z"/><path d="M17 9.5h1.5a2.5 2.5 0 0 1 0 5H17"/><path d="M8 4.2c-1 1-1 1.6 0 2.6M11.5 4.2c-1 1-1 1.6 0 2.6"/>',
+    latte: '<path d="M5 9h11v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V9Z"/><path d="M16 10h1.6a2.2 2.2 0 0 1 0 4.4H16"/><path d="M10.5 11.4c-1.3-1.3-3.1.4-1.6 1.9.8.8 1.6 1.5 1.6 1.5s.8-.7 1.6-1.5c1.5-1.5-.3-3.2-1.6-1.9Z"/>',
+    pourover: '<path d="M6.5 4h11l-2 6h-7l-2-6Z"/><path d="M9 10v2.6a3 3 0 0 0 3 3h0a3 3 0 0 0 3-3V10"/><path d="M4.5 19.6h15"/><path d="M12 15.6v4"/>',
     hot: '<path d="M4.5 10h11v4a4 4 0 0 1-4 4h-3a4 4 0 0 1-4-4v-4Z"/><path d="M15.5 11h1.7a2 2 0 0 1 0 4h-1"/><path d="M2.5 20.5h15"/><path d="M8 5.2c-1 1 .9 1.8 0 2.8M11.5 5.2c-1 1 .9 1.8 0 2.8"/>',
-    matcha:
-      '<path d="M5 10a7 7 0 0 0 14 0Z"/><path d="M4.5 10h15"/><path d="M12 3v3.4"/><path d="M9.4 4.4l1 1.8M14.6 4.4l-1 1.8"/>',
+    matcha: '<path d="M5 10a7 7 0 0 0 14 0Z"/><path d="M4.5 10h15"/><path d="M12 3v3.4"/><path d="M9.4 4.4l1 1.8M14.6 4.4l-1 1.8"/>',
     tea: '<path d="M4 14a8 5.2 0 0 0 16 0Z"/><path d="M4 14h16"/><path d="M17 12c3.7-.8 4.1 4.2.4 4.5"/><path d="M7.4 9c-2-2.8 2-2.8 0-6"/><circle cx="12" cy="7.6" r="1"/>',
     cold: '<path d="M7 8h10l-1 11a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2L7 8Z"/><path d="M9 8l6-4"/><line x1="8" y1="12.2" x2="16" y2="12.2"/>',
-    mocktail:
-      '<path d="M5 4h14l-7 8v6"/><path d="M9 20h6"/><path d="M6.7 4.4 12 9"/><circle cx="15.5" cy="6" r="1"/>',
-    shake:
-      '<path d="M8 5h8l-1.2 14a2 2 0 0 1-2 1.8h-1.6a2 2 0 0 1-2-1.8L8 5Z"/><path d="M8 9h8"/><path d="M13 2v4"/><circle cx="13" cy="1.6" r="1"/>',
-    smoothie:
-      '<path d="M7.5 8h9l-1.2 11a2 2 0 0 1-2 1.8h-2.6a2 2 0 0 1-2-1.8L7.5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/><path d="M9.4 12h5.2"/>',
+    mocktail: '<path d="M5 4h14l-7 8v6"/><path d="M9 20h6"/><path d="M6.7 4.4 12 9"/><circle cx="15.5" cy="6" r="1"/>',
+    shake: '<path d="M8 5h8l-1.2 14a2 2 0 0 1-2 1.8h-1.6a2 2 0 0 1-2-1.8L8 5Z"/><path d="M8 9h8"/><path d="M13 2v4"/><circle cx="13" cy="1.6" r="1"/>',
+    smoothie: '<path d="M7.5 8h9l-1.2 11a2 2 0 0 1-2 1.8h-2.6a2 2 0 0 1-2-1.8L7.5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/><path d="M9.4 12h5.2"/>',
     cake: '<path d="M4 20 12 6l8 14Z"/><path d="M7.2 14h9.6"/><circle cx="12" cy="4" r="1.3"/>',
-    default:
-      '<path d="M6 3v6.5a2 2 0 0 0 4 0V3"/><path d="M8 9.5V21"/><path d="M17 3c-1.7 0-3 2-3 5.5S15.3 14 17 14"/><path d="M17 3v18"/>',
+    default: '<path d="M6 3v6.5a2 2 0 0 0 4 0V3"/><path d="M8 9.5V21"/><path d="M17 3c-1.7 0-3 2-3 5.5S15.3 14 17 14"/><path d="M17 3v18"/>',
   };
 
   /** Resolve a category name to one of the icon keys above. */
@@ -136,9 +128,7 @@
   function toPersianPrice(value) {
     const rounded = Math.round(Number(value) || 0);
     const withSeparators = rounded.toLocaleString("en-US"); // "145,000"
-    const persianized = withSeparators
-      .replace(/[0-9]/g, (d) => PERSIAN_DIGITS[d])
-      .replace(/,/g, "٬");
+    const persianized = withSeparators.replace(/[0-9]/g, (d) => PERSIAN_DIGITS[d]).replace(/,/g, "٬");
     return `${persianized} تومان`;
   }
 
@@ -209,12 +199,9 @@
     } catch (err) {
       if (thisRequest !== requestToken) return; // a newer request has since started
       console.error("[Bobcafe] Failed to load menu:", err);
-      setStatus(
-        "error",
-        err && err.message === "EMPTY"
-          ? "در حال حاضر موردی در منو ثبت نشده است."
-          : "مشکلی در بارگذاری منو پیش آمد. لطفاً اتصال اینترنت را بررسی کرده و دوباره تلاش کنید.",
-      );
+      setStatus("error", err && err.message === "EMPTY"
+        ? "در حال حاضر موردی در منو ثبت نشده است."
+        : "مشکلی در بارگذاری منو پیش آمد. لطفاً اتصال اینترنت را بررسی کرده و دوباره تلاش کنید.");
       return;
     }
 
@@ -240,23 +227,11 @@
 
   /** Fill in graceful defaults for any missing/malformed fields. */
   function normalizeItem(item) {
-    const name =
-      typeof item.name === "string" && item.name.trim()
-        ? item.name.trim()
-        : "بدون نام";
-    const description =
-      typeof item.description === "string" ? item.description.trim() : "";
-    const category =
-      typeof item.category === "string" && item.category.trim()
-        ? item.category.trim()
-        : "متفرقه";
-    const price = Number.isFinite(Number(item.price))
-      ? Number(item.price)
-      : null;
-    const image =
-      typeof item.image === "string" && item.image.trim()
-        ? item.image.trim()
-        : "";
+    const name = typeof item.name === "string" && item.name.trim() ? item.name.trim() : "بدون نام";
+    const description = typeof item.description === "string" ? item.description.trim() : "";
+    const category = typeof item.category === "string" && item.category.trim() ? item.category.trim() : "متفرقه";
+    const price = Number.isFinite(Number(item.price)) ? Number(item.price) : null;
+    const image = typeof item.image === "string" && item.image.trim() ? item.image.trim() : "";
 
     return { name, description, category, price, image };
   }
@@ -267,9 +242,7 @@
   function sortByCategoryOrder(names) {
     const rank = (name) => {
       const idx = CONFIG.categoryOrder.indexOf(name);
-      return idx === -1
-        ? CONFIG.categoryOrder.length + names.indexOf(name)
-        : idx;
+      return idx === -1 ? CONFIG.categoryOrder.length + names.indexOf(name) : idx;
     };
     return [...names].sort((a, b) => rank(a) - rank(b));
   }
@@ -356,14 +329,10 @@
   function getFilteredItems() {
     const term = normalize(state.searchTerm);
     return state.items.filter((item) => {
-      const matchesCategory =
-        state.activeCategory === "all" ||
-        item.category === state.activeCategory;
+      const matchesCategory = state.activeCategory === "all" || item.category === state.activeCategory;
       if (!matchesCategory) return false;
       if (!term) return true;
-      const haystack = normalize(
-        `${item.name} ${item.description} ${item.category}`,
-      );
+      const haystack = normalize(`${item.name} ${item.description} ${item.category}`);
       return haystack.includes(term);
     });
   }
@@ -410,9 +379,7 @@
         }
       }
     } else {
-      filtered.forEach((item, i) =>
-        frag.appendChild(createCard(item, term, i)),
-      );
+      filtered.forEach((item, i) => frag.appendChild(createCard(item, term, i)));
     }
 
     dom.menuGrid.appendChild(frag);
@@ -434,19 +401,14 @@
     card.className = "card";
     card.style.setProperty("--i", String(index % 12));
 
-    const imgSrc = item.image
-      ? `${CONFIG.imageBase}${item.image}`
-      : CONFIG.fallbackImage;
-    const priceMarkup =
-      item.price !== null
-        ? `<span class="card__price">${toPersianPrice(item.price)}</span>`
-        : `<span class="card__price"><small>قیمت نامشخص</small></span>`;
+    const imgSrc = item.image ? `${CONFIG.imageBase}${item.image}` : CONFIG.fallbackImage;
+    const priceMarkup = item.price !== null
+      ? `<span class="card__price">${toPersianPrice(item.price)}</span>`
+      : `<span class="card__price"><small>قیمت نامشخص</small></span>`;
 
     // Stable cart key derived from the item's own data (name+category),
     // independent of list position so it survives search/filter re-renders.
-    const cartKey = window.Cart
-      ? window.Cart.keyFor(item.name, item.category)
-      : "";
+    const cartKey = window.Cart ? window.Cart.keyFor(item.name, item.category) : "";
     const canAddToCart = item.price !== null;
 
     card.innerHTML = `
@@ -470,22 +432,16 @@
 
     // Graceful image fallback if the file is missing or fails to load
     const img = card.querySelector("img");
-    img.addEventListener(
-      "error",
-      () => {
-        if (img.src.indexOf(CONFIG.fallbackImage) === -1) {
-          img.src = CONFIG.fallbackImage;
-        }
-      },
-      { once: true },
-    );
+    img.addEventListener("error", () => {
+      if (img.src.indexOf(CONFIG.fallbackImage) === -1) {
+        img.src = CONFIG.fallbackImage;
+      }
+    }, { once: true });
 
     if (canAddToCart && window.Cart) {
       const qtyHost = card.querySelector(".card__qty");
       renderQtyControl(qtyHost, cartKey, item);
-      const unsubscribe = window.Cart.subscribe(() =>
-        renderQtyControl(qtyHost, cartKey, item),
-      );
+      const unsubscribe = window.Cart.subscribe(() => renderQtyControl(qtyHost, cartKey, item));
       cartUnsubscribers.push(unsubscribe);
     }
 
@@ -520,14 +476,8 @@
         <span class="qty-stepper__count">${toPersianDigitsOnly(qty)}</span>
         <button type="button" class="qty-stepper__btn" data-action="inc" aria-label="زیاد کردن">+</button>
       </div>`;
-    host
-      .querySelector('[data-action="dec"]')
-      .addEventListener("click", () => window.Cart.decrease(cartKey));
-    host
-      .querySelector('[data-action="inc"]')
-      .addEventListener("click", () =>
-        window.Cart.add(cartKey, item.name, item.price),
-      );
+    host.querySelector('[data-action="dec"]').addEventListener("click", () => window.Cart.decrease(cartKey));
+    host.querySelector('[data-action="inc"]').addEventListener("click", () => window.Cart.add(cartKey, item.name, item.price));
   }
 
   /* ------------------------------------------------------------
@@ -541,9 +491,7 @@
       renderGrid();
     }, CONFIG.searchDebounceMs);
 
-    dom.searchInput.addEventListener("input", (e) =>
-      handleInput(e.target.value),
-    );
+    dom.searchInput.addEventListener("input", (e) => handleInput(e.target.value));
 
     dom.searchClear.addEventListener("click", () => {
       dom.searchInput.value = "";
@@ -585,28 +533,23 @@
     const sentinel = document.getElementById("top");
     if (!("IntersectionObserver" in window) || !sentinel) return;
     const io = new IntersectionObserver(
-      ([entry]) =>
-        dom.controls.classList.toggle("is-stuck", !entry.isIntersecting),
-      { threshold: 0, rootMargin: "-1px 0px 0px 0px" },
+      ([entry]) => dom.controls.classList.toggle("is-stuck", !entry.isIntersecting),
+      { threshold: 0, rootMargin: "-1px 0px 0px 0px" }
     );
     io.observe(sentinel);
   }
 
   function initBackToTop() {
     let ticking = false;
-    window.addEventListener(
-      "scroll",
-      () => {
-        if (ticking) return;
-        ticking = true;
-        requestAnimationFrame(() => {
-          dom.backToTop.hidden = false;
-          dom.backToTop.classList.toggle("is-visible", window.scrollY > 640);
-          ticking = false;
-        });
-      },
-      { passive: true },
-    );
+    window.addEventListener("scroll", () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        dom.backToTop.hidden = false;
+        dom.backToTop.classList.toggle("is-visible", window.scrollY > 640);
+        ticking = false;
+      });
+    }, { passive: true });
 
     dom.backToTop.addEventListener("click", () => {
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -618,13 +561,11 @@
     // theme before first paint (saved preference, or Light Mode by
     // default). This just keeps the toggle button in sync and saves
     // any manual change so it persists across future visits.
-    const isDark =
-      document.documentElement.getAttribute("data-theme") === "dark";
+    const isDark = document.documentElement.getAttribute("data-theme") === "dark";
     dom.themeToggle.setAttribute("aria-pressed", String(isDark));
 
     dom.themeToggle.addEventListener("click", () => {
-      const currentlyDark =
-        document.documentElement.getAttribute("data-theme") === "dark";
+      const currentlyDark = document.documentElement.getAttribute("data-theme") === "dark";
       const next = currentlyDark ? "light" : "dark";
       document.documentElement.setAttribute("data-theme", next);
       dom.themeToggle.setAttribute("aria-pressed", String(next === "dark"));
