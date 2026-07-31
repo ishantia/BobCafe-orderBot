@@ -4,7 +4,8 @@
 (() => {
   "use strict";
 
-  const API_BASE = (window.BOBCAFE_CONFIG && window.BOBCAFE_CONFIG.API_BASE) || "";
+  const API_BASE =
+    (window.BOBCAFE_CONFIG && window.BOBCAFE_CONFIG.API_BASE) || "";
   const LAST_ORDER_KEY = "bobcafe:lastOrder";
   const POLL_INTERVAL_MS = 10000;
   const PERSIAN_DIGITS = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
@@ -23,7 +24,9 @@
   function toPersianPrice(value) {
     const rounded = Math.round(Number(value) || 0);
     const withSeparators = rounded.toLocaleString("en-US");
-    const persianized = withSeparators.replace(/[0-9]/g, (d) => PERSIAN_DIGITS[d]).replace(/,/g, "٬");
+    const persianized = withSeparators
+      .replace(/[0-9]/g, (d) => PERSIAN_DIGITS[d])
+      .replace(/,/g, "٬");
     return `${persianized} تومان`;
   }
   function escapeHtml(str) {
@@ -122,11 +125,15 @@
     el.innerHTML = `
       <h3 class="checkout-summary__title">خلاصه سفارش</h3>
       <ul class="checkout-summary__list">
-        ${cartState.items.map((i) => `
+        ${cartState.items
+          .map(
+            (i) => `
           <li>
             <span>${toPersianDigitsOnly(i.qty)} × ${escapeHtml(i.name)}</span>
             <span>${toPersianPrice(i.subtotal)}</span>
-          </li>`).join("")}
+          </li>`,
+          )
+          .join("")}
       </ul>
       <div class="checkout-summary__total">
         <span>جمع کل</span>
@@ -232,7 +239,8 @@
       document.getElementById("checkoutForm").reset();
     } catch (err) {
       console.error("[Bobcafe] Order submission failed:", err);
-      formError.textContent = "ثبت سفارش با مشکل مواجه شد. لطفاً دوباره تلاش کنید یا سفارش را به میزبان اطلاع دهید.";
+      formError.textContent =
+        "ثبت سفارش با مشکل مواجه شد. لطفاً دوباره تلاش کنید یا سفارش را به میزبان اطلاع دهید.";
       formError.hidden = false;
     } finally {
       submitBtn.disabled = false;
@@ -241,8 +249,10 @@
   }
 
   function showConfirmation(orderNumber, status) {
-    document.getElementById("confirmOrderNumber").textContent = `سفارش #${toPersianDigitsOnly(orderNumber)}`;
-    document.getElementById("confirmStatus").textContent = STATUS_LABELS[status] || STATUS_LABELS.pending;
+    document.getElementById("confirmOrderNumber").textContent =
+      `سفارش #${toPersianDigitsOnly(orderNumber)}`;
+    document.getElementById("confirmStatus").textContent =
+      STATUS_LABELS[status] || STATUS_LABELS.pending;
     document.getElementById("confirmOverlay").hidden = false;
     document.body.classList.add("no-scroll");
   }
@@ -252,8 +262,13 @@
    * ---------------------------------------------------------- */
   function saveLastOrder(orderNumber) {
     try {
-      localStorage.setItem(LAST_ORDER_KEY, JSON.stringify({ orderNumber, savedAt: Date.now() }));
-    } catch (e) { /* ignore */ }
+      localStorage.setItem(
+        LAST_ORDER_KEY,
+        JSON.stringify({ orderNumber, savedAt: Date.now() }),
+      );
+    } catch (e) {
+      /* ignore */
+    }
   }
 
   function loadLastOrder() {
@@ -269,7 +284,11 @@
   }
 
   function clearLastOrder() {
-    try { localStorage.removeItem(LAST_ORDER_KEY); } catch (e) { /* ignore */ }
+    try {
+      localStorage.removeItem(LAST_ORDER_KEY);
+    } catch (e) {
+      /* ignore */
+    }
   }
 
   const READY_SHOWN_KEY_PREFIX = "bobcafe:readyShown:";
@@ -284,16 +303,23 @@
   function markReadyAlertShown(orderNumber) {
     try {
       localStorage.setItem(READY_SHOWN_KEY_PREFIX + orderNumber, "1");
-    } catch (e) { /* ignore */ }
+    } catch (e) {
+      /* ignore */
+    }
   }
 
   function showReadyCelebration(orderNumber) {
-    document.getElementById("readyOverlayOrder").textContent = `سفارش #${toPersianDigitsOnly(orderNumber)}`;
+    document.getElementById("readyOverlayOrder").textContent =
+      `سفارش #${toPersianDigitsOnly(orderNumber)}`;
     const overlay = document.getElementById("readyOverlay");
     overlay.hidden = false;
     document.body.classList.add("no-scroll");
     // Best-effort attention nudge — silently ignored where unsupported.
-    try { navigator.vibrate?.([160, 80, 160]); } catch (e) { /* ignore */ }
+    try {
+      navigator.vibrate?.([160, 80, 160]);
+    } catch (e) {
+      /* ignore */
+    }
   }
 
   function closeReadyCelebration() {
@@ -304,10 +330,15 @@
   function updateStatusBar(orderNumber, status, cancelReason) {
     const bar = document.getElementById("orderStatusBar");
     const reasonEl = document.getElementById("statusBarReason");
-    document.getElementById("statusBarNumber").textContent = `#${toPersianDigitsOnly(orderNumber)}`;
-    document.getElementById("statusBarLabel").textContent = STATUS_LABELS[status] || STATUS_LABELS.pending;
+    document.getElementById("statusBarNumber").textContent =
+      `#${toPersianDigitsOnly(orderNumber)}`;
+    document.getElementById("statusBarLabel").textContent =
+      STATUS_LABELS[status] || STATUS_LABELS.pending;
     bar.hidden = false;
-    bar.classList.toggle("is-done", status === "ready" || status === "cancelled");
+    bar.classList.toggle(
+      "is-done",
+      status === "ready" || status === "cancelled",
+    );
     document.body.classList.add("has-status-bar");
 
     if (status === "cancelled" && cancelReason) {
@@ -326,7 +357,10 @@
 
   async function pollOnce(orderNumber) {
     try {
-      const res = await fetch(`${API_BASE}/api/orders/${encodeURIComponent(orderNumber)}`, { cache: "no-store" });
+      const res = await fetch(
+        `${API_BASE}/api/orders/${encodeURIComponent(orderNumber)}`,
+        { cache: "no-store" },
+      );
       if (res.status === 404) {
         stopPolling();
         clearLastOrder();
@@ -372,18 +406,28 @@
    * Wiring
    * ---------------------------------------------------------- */
   function initEvents() {
-    document.getElementById("checkoutClose").addEventListener("click", closeCheckout);
-    document.getElementById("checkoutOverlay").addEventListener("click", (e) => {
-      if (e.target.id === "checkoutOverlay") closeCheckout();
-    });
-    document.getElementById("checkoutForm").addEventListener("submit", submitOrder);
+    document
+      .getElementById("checkoutClose")
+      .addEventListener("click", closeCheckout);
+    document
+      .getElementById("checkoutOverlay")
+      .addEventListener("click", (e) => {
+        if (e.target.id === "checkoutOverlay") closeCheckout();
+      });
+    document
+      .getElementById("checkoutForm")
+      .addEventListener("submit", submitOrder);
 
-    document.getElementById("confirmClose").addEventListener("click", closeConfirm);
+    document
+      .getElementById("confirmClose")
+      .addEventListener("click", closeConfirm);
     document.getElementById("confirmOverlay").addEventListener("click", (e) => {
       if (e.target.id === "confirmOverlay") closeConfirm();
     });
 
-    document.getElementById("readyOverlayDismiss").addEventListener("click", closeReadyCelebration);
+    document
+      .getElementById("readyOverlayDismiss")
+      .addEventListener("click", closeReadyCelebration);
     document.getElementById("readyOverlay").addEventListener("click", (e) => {
       if (e.target.id === "readyOverlay") closeReadyCelebration();
     });
@@ -392,7 +436,8 @@
       if (e.key !== "Escape") return;
       if (!document.getElementById("checkoutOverlay").hidden) closeCheckout();
       if (!document.getElementById("confirmOverlay").hidden) closeConfirm();
-      if (!document.getElementById("readyOverlay").hidden) closeReadyCelebration();
+      if (!document.getElementById("readyOverlay").hidden)
+        closeReadyCelebration();
     });
   }
 

@@ -218,7 +218,7 @@
   },
   {
     "name": "آیس آمریکانو",
-    "description": "اسپرسو به همراه 120 میل آب داغ و یخ" ,
+    "description": "اسپرسو به همراه 120 میل آب داغ و یخ",
     "price": 240000,
     "category": "ایس کافی بار",
     "image": "ice-coffee-americano.webp"
@@ -440,14 +440,14 @@
     "category": "غذا",
     "image": "french-fries.webp"
   },
-    {
+  {
     "name": "کلاسیک برگر",
     "description": "برگر کلاسیک به همراه فرنچ فرایز",
     "price": 690000,
     "category": "غذا",
     "image": "classic-burger.webp"
   },
-    {
+  {
     "name": "پاستا آلفردو",
     "description": "پاستا با سس آلفردو و مرغ گریل شده",
     "price": 710000,
