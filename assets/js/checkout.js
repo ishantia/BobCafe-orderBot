@@ -4,8 +4,7 @@
 (() => {
   "use strict";
 
-  const API_BASE =
-    (window.BOBCAFE_CONFIG && window.BOBCAFE_CONFIG.API_BASE) || "";
+  const API_BASE = (window.BOBCAFE_CONFIG && window.BOBCAFE_CONFIG.API_BASE) || "";
   const LAST_ORDER_KEY = "bobcafe:lastOrder";
   const POLL_INTERVAL_MS = 10000;
   const PERSIAN_DIGITS = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
@@ -24,9 +23,7 @@
   function toPersianPrice(value) {
     const rounded = Math.round(Number(value) || 0);
     const withSeparators = rounded.toLocaleString("en-US");
-    const persianized = withSeparators
-      .replace(/[0-9]/g, (d) => PERSIAN_DIGITS[d])
-      .replace(/,/g, "٬");
+    const persianized = withSeparators.replace(/[0-9]/g, (d) => PERSIAN_DIGITS[d]).replace(/,/g, "٬");
     return `${persianized} تومان`;
   }
   function escapeHtml(str) {
@@ -97,12 +94,12 @@
         </section>
       </div>
 
-      <div class="order-status-bar" id="orderStatusBar" hidden>
-        <div class="order-status-bar__main">
-          <span class="order-status-bar__number" id="statusBarNumber"></span>
-          <span class="order-status-bar__label" id="statusBarLabel"></span>
+      <div class="toast" id="statusToast" hidden role="status" aria-live="polite">
+        <div class="toast__main">
+          <span class="toast__number" id="toastNumber"></span>
+          <span class="toast__label" id="toastLabel"></span>
         </div>
-        <p class="order-status-bar__reason" id="statusBarReason" hidden></p>
+        <p class="toast__reason" id="toastReason" hidden></p>
       </div>
 
       <div class="ready-overlay" id="readyOverlay" hidden role="alertdialog" aria-live="assertive" aria-labelledby="readyOverlayTitle">
@@ -125,15 +122,11 @@
     el.innerHTML = `
       <h3 class="checkout-summary__title">خلاصه سفارش</h3>
       <ul class="checkout-summary__list">
-        ${cartState.items
-          .map(
-            (i) => `
+        ${cartState.items.map((i) => `
           <li>
             <span>${toPersianDigitsOnly(i.qty)} × ${escapeHtml(i.name)}</span>
             <span>${toPersianPrice(i.subtotal)}</span>
-          </li>`,
-          )
-          .join("")}
+          </li>`).join("")}
       </ul>
       <div class="checkout-summary__total">
         <span>جمع کل</span>
@@ -235,12 +228,11 @@
       closeCheckout();
       showConfirmation(data.orderNumber, data.status || "pending");
       saveLastOrder(data.orderNumber);
-      startPolling(data.orderNumber);
+      startPolling(data.orderNumber, { skipInitialToast: true });
       document.getElementById("checkoutForm").reset();
     } catch (err) {
       console.error("[Bobcafe] Order submission failed:", err);
-      formError.textContent =
-        "ثبت سفارش با مشکل مواجه شد. لطفاً دوباره تلاش کنید یا سفارش را به میزبان اطلاع دهید.";
+      formError.textContent = "ثبت سفارش با مشکل مواجه شد. لطفاً دوباره تلاش کنید یا سفارش را به میزبان اطلاع دهید.";
       formError.hidden = false;
     } finally {
       submitBtn.disabled = false;
@@ -249,10 +241,8 @@
   }
 
   function showConfirmation(orderNumber, status) {
-    document.getElementById("confirmOrderNumber").textContent =
-      `سفارش #${toPersianDigitsOnly(orderNumber)}`;
-    document.getElementById("confirmStatus").textContent =
-      STATUS_LABELS[status] || STATUS_LABELS.pending;
+    document.getElementById("confirmOrderNumber").textContent = `سفارش #${toPersianDigitsOnly(orderNumber)}`;
+    document.getElementById("confirmStatus").textContent = STATUS_LABELS[status] || STATUS_LABELS.pending;
     document.getElementById("confirmOverlay").hidden = false;
     document.body.classList.add("no-scroll");
   }
@@ -262,13 +252,8 @@
    * ---------------------------------------------------------- */
   function saveLastOrder(orderNumber) {
     try {
-      localStorage.setItem(
-        LAST_ORDER_KEY,
-        JSON.stringify({ orderNumber, savedAt: Date.now() }),
-      );
-    } catch (e) {
-      /* ignore */
-    }
+      localStorage.setItem(LAST_ORDER_KEY, JSON.stringify({ orderNumber, savedAt: Date.now() }));
+    } catch (e) { /* ignore */ }
   }
 
   function loadLastOrder() {
@@ -284,11 +269,95 @@
   }
 
   function clearLastOrder() {
-    try {
-      localStorage.removeItem(LAST_ORDER_KEY);
-    } catch (e) {
-      /* ignore */
+    try { localStorage.removeItem(LAST_ORDER_KEY); } catch (e) { /* ignore */ }
+  }
+
+  let toastTimer = null;
+
+  function showStatusToast(orderNumber, status, cancelReason) {
+    const toast = document.getElementById("statusToast");
+    const reasonEl = document.getElementById("toastReason");
+
+    document.getElementById("toastNumber").textContent = `#${toPersianDigitsOnly(orderNumber)}`;
+    document.getElementById("toastLabel").textContent = STATUS_LABELS[status] || STATUS_LABELS.pending;
+
+    if (status === "cancelled" && cancelReason) {
+      reasonEl.textContent = `دلیل: ${cancelReason}`;
+      reasonEl.hidden = false;
+    } else {
+      reasonEl.hidden = true;
     }
+
+    // Restart the animation/timer even if a toast is already showing, so a
+    // rapid second status change gets its own fresh 10-second window.
+    toast.hidden = false;
+    toast.classList.remove("toast--visible");
+    // Forces a reflow so the re-added class re-triggers the CSS animation.
+    void toast.offsetWidth;
+    toast.classList.add("toast--visible");
+
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      toast.classList.remove("toast--visible");
+      setTimeout(() => { toast.hidden = true; }, 250);
+    }, 10000);
+  }
+
+  /* ------------------------------------------------------------
+   * Attention sound for the "ready" status. Built with the Web Audio API
+   * (no external audio file to host). Browsers block audio until the user
+   * has interacted with the page at least once, so the context is created
+   * lazily on first tap/click anywhere on the site.
+   * ---------------------------------------------------------- */
+  let audioCtx = null;
+  function unlockAudio() {
+    if (audioCtx) return;
+    try {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (Ctx) audioCtx = new Ctx();
+    } catch (e) { /* ignore — sound is a nice-to-have, never blocking */ }
+  }
+  document.addEventListener("click", unlockAudio, { once: true });
+  document.addEventListener("touchstart", unlockAudio, { once: true });
+
+  function playReadyChime() {
+    try {
+      if (!audioCtx) unlockAudio();
+      if (!audioCtx) return;
+      if (audioCtx.state === "suspended") audioCtx.resume();
+
+      const notes = [880, 1175]; // a short, pleasant two-note "ding-dong"
+      notes.forEach((freq, i) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = "sine";
+        osc.frequency.value = freq;
+        const startAt = audioCtx.currentTime + i * 0.18;
+        gain.gain.setValueAtTime(0.0001, startAt);
+        gain.gain.exponentialRampToValueAtTime(0.35, startAt + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, startAt + 0.32);
+        osc.connect(gain).connect(audioCtx.destination);
+        osc.start(startAt);
+        osc.stop(startAt + 0.35);
+      });
+    } catch (e) {
+      console.error("[Bobcafe] Could not play ready chime:", e);
+    }
+  }
+
+  function showReadyCelebration(orderNumber) {
+    document.getElementById("readyOverlayOrder").textContent = `سفارش #${toPersianDigitsOnly(orderNumber)}`;
+    const overlay = document.getElementById("readyOverlay");
+    overlay.hidden = false;
+    document.body.classList.add("no-scroll");
+    playReadyChime();
+    // Best-effort attention nudge — silently ignored where unsupported.
+    try { navigator.vibrate?.([160, 80, 160]); } catch (e) { /* ignore */ }
+  }
+
+  function closeReadyCelebration() {
+    document.getElementById("readyOverlay").hidden = true;
+    document.body.classList.remove("no-scroll");
   }
 
   const READY_SHOWN_KEY_PREFIX = "bobcafe:readyShown:";
@@ -303,73 +372,27 @@
   function markReadyAlertShown(orderNumber) {
     try {
       localStorage.setItem(READY_SHOWN_KEY_PREFIX + orderNumber, "1");
-    } catch (e) {
-      /* ignore */
-    }
+    } catch (e) { /* ignore */ }
   }
 
-  function showReadyCelebration(orderNumber) {
-    document.getElementById("readyOverlayOrder").textContent =
-      `سفارش #${toPersianDigitsOnly(orderNumber)}`;
-    const overlay = document.getElementById("readyOverlay");
-    overlay.hidden = false;
-    document.body.classList.add("no-scroll");
-    // Best-effort attention nudge — silently ignored where unsupported.
-    try {
-      navigator.vibrate?.([160, 80, 160]);
-    } catch (e) {
-      /* ignore */
-    }
-  }
-
-  function closeReadyCelebration() {
-    document.getElementById("readyOverlay").hidden = true;
-    document.body.classList.remove("no-scroll");
-  }
-
-  function updateStatusBar(orderNumber, status, cancelReason) {
-    const bar = document.getElementById("orderStatusBar");
-    const reasonEl = document.getElementById("statusBarReason");
-    document.getElementById("statusBarNumber").textContent =
-      `#${toPersianDigitsOnly(orderNumber)}`;
-    document.getElementById("statusBarLabel").textContent =
-      STATUS_LABELS[status] || STATUS_LABELS.pending;
-    bar.hidden = false;
-    bar.classList.toggle(
-      "is-done",
-      status === "ready" || status === "cancelled",
-    );
-    document.body.classList.add("has-status-bar");
-
-    if (status === "cancelled" && cancelReason) {
-      reasonEl.textContent = `دلیل: ${cancelReason}`;
-      reasonEl.hidden = false;
-    } else {
-      reasonEl.hidden = true;
-    }
-  }
-
-  function hideStatusBar() {
-    const bar = document.getElementById("orderStatusBar");
-    bar.hidden = true;
-    document.body.classList.remove("has-status-bar");
-  }
+  let lastStatusSeen = null;
 
   async function pollOnce(orderNumber) {
     try {
-      const res = await fetch(
-        `${API_BASE}/api/orders/${encodeURIComponent(orderNumber)}`,
-        { cache: "no-store" },
-      );
+      const res = await fetch(`${API_BASE}/api/orders/${encodeURIComponent(orderNumber)}`, { cache: "no-store" });
       if (res.status === 404) {
         stopPolling();
         clearLastOrder();
-        hideStatusBar();
         return;
       }
       if (!res.ok) return; // transient network/server error — try again next tick
       const data = await res.json();
-      updateStatusBar(orderNumber, data.status, data.cancelReason);
+
+      const statusChanged = data.status !== lastStatusSeen;
+      lastStatusSeen = data.status;
+      if (statusChanged) {
+        showStatusToast(orderNumber, data.status, data.cancelReason);
+      }
 
       if (data.status === "ready" && !hasShownReadyAlert(orderNumber)) {
         showReadyCelebration(orderNumber);
@@ -384,8 +407,12 @@
     }
   }
 
-  function startPolling(orderNumber) {
+  function startPolling(orderNumber, { skipInitialToast = false } = {}) {
     stopPolling();
+    // Setting this up-front means the very first poll won't fire a
+    // redundant toast right after the order-confirmation dialog already
+    // showed the same "pending" status.
+    lastStatusSeen = skipInitialToast ? "pending" : null;
     pollOnce(orderNumber);
     pollTimer = setInterval(() => pollOnce(orderNumber), POLL_INTERVAL_MS);
   }
@@ -399,35 +426,27 @@
 
   function resumeTrackingIfNeeded() {
     const orderNumber = loadLastOrder();
-    if (orderNumber) startPolling(orderNumber);
+    // On a fresh page load there's no confirmation dialog to lean on, so
+    // let the first poll show a toast with whatever the current status is.
+    if (orderNumber) startPolling(orderNumber, { skipInitialToast: false });
   }
 
   /* ------------------------------------------------------------
    * Wiring
    * ---------------------------------------------------------- */
   function initEvents() {
-    document
-      .getElementById("checkoutClose")
-      .addEventListener("click", closeCheckout);
-    document
-      .getElementById("checkoutOverlay")
-      .addEventListener("click", (e) => {
-        if (e.target.id === "checkoutOverlay") closeCheckout();
-      });
-    document
-      .getElementById("checkoutForm")
-      .addEventListener("submit", submitOrder);
+    document.getElementById("checkoutClose").addEventListener("click", closeCheckout);
+    document.getElementById("checkoutOverlay").addEventListener("click", (e) => {
+      if (e.target.id === "checkoutOverlay") closeCheckout();
+    });
+    document.getElementById("checkoutForm").addEventListener("submit", submitOrder);
 
-    document
-      .getElementById("confirmClose")
-      .addEventListener("click", closeConfirm);
+    document.getElementById("confirmClose").addEventListener("click", closeConfirm);
     document.getElementById("confirmOverlay").addEventListener("click", (e) => {
       if (e.target.id === "confirmOverlay") closeConfirm();
     });
 
-    document
-      .getElementById("readyOverlayDismiss")
-      .addEventListener("click", closeReadyCelebration);
+    document.getElementById("readyOverlayDismiss").addEventListener("click", closeReadyCelebration);
     document.getElementById("readyOverlay").addEventListener("click", (e) => {
       if (e.target.id === "readyOverlay") closeReadyCelebration();
     });
@@ -436,8 +455,7 @@
       if (e.key !== "Escape") return;
       if (!document.getElementById("checkoutOverlay").hidden) closeCheckout();
       if (!document.getElementById("confirmOverlay").hidden) closeConfirm();
-      if (!document.getElementById("readyOverlay").hidden)
-        closeReadyCelebration();
+      if (!document.getElementById("readyOverlay").hidden) closeReadyCelebration();
     });
   }
 
