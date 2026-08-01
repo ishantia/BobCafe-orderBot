@@ -15,7 +15,9 @@
   function toPersianPrice(value) {
     const rounded = Math.round(Number(value) || 0);
     const withSeparators = rounded.toLocaleString("en-US");
-    const persianized = withSeparators.replace(/[0-9]/g, (d) => PERSIAN_DIGITS[d]).replace(/,/g, "٬");
+    const persianized = withSeparators
+      .replace(/[0-9]/g, (d) => PERSIAN_DIGITS[d])
+      .replace(/,/g, "٬");
     return `${persianized} تومان`;
   }
   function escapeHtml(str) {
@@ -50,7 +52,11 @@
   function notify() {
     persist();
     listeners.forEach((fn) => {
-      try { fn(getState()); } catch (e) { console.error("[Bobcafe] cart listener error:", e); }
+      try {
+        fn(getState());
+      } catch (e) {
+        console.error("[Bobcafe] cart listener error:", e);
+      }
     });
   }
 
@@ -74,7 +80,8 @@
 
   function add(key, name, price, category) {
     if (!key || price === null || price === undefined) return;
-    if (!items[key]) items[key] = { name, category: category || "", price, qty: 0 };
+    if (!items[key])
+      items[key] = { name, category: category || "", price, qty: 0 };
     items[key].qty += 1;
     notify();
   }
@@ -116,7 +123,17 @@
 
   loadFromStorage();
 
-  window.Cart = { add, increase, decrease, remove: removeItem, clear, getQty, getState, subscribe, keyFor };
+  window.Cart = {
+    add,
+    increase,
+    decrease,
+    remove: removeItem,
+    clear,
+    getQty,
+    getState,
+    subscribe,
+    keyFor,
+  };
 
   /* ------------------------------------------------------------
    * Cart drawer UI — built once DOM is ready
@@ -171,7 +188,9 @@
     footer.hidden = false;
     total.textContent = toPersianPrice(state.total);
 
-    body.innerHTML = state.items.map((item) => `
+    body.innerHTML = state.items
+      .map(
+        (item) => `
       <div class="cart-item" data-key="${escapeHtml(item.key)}">
         <div class="cart-item__info">
           <span class="cart-item__name">${escapeHtml(item.name)}</span>
@@ -188,7 +207,9 @@
             <svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 7h12M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m-8 0 1 13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1l1-13" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
         </div>
-      </div>`).join("");
+      </div>`,
+      )
+      .join("");
   }
 
   function openCart() {
@@ -207,7 +228,8 @@
       if (e.target.id === "cartOverlay") closeCart();
     });
     document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && !document.getElementById("cartOverlay").hidden) closeCart();
+      if (e.key === "Escape" && !document.getElementById("cartOverlay").hidden)
+        closeCart();
     });
 
     document.getElementById("cartBody").addEventListener("click", (e) => {
