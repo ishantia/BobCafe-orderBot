@@ -153,6 +153,9 @@
             <button class="sheet__close" id="cartClose" type="button" aria-label="بستن سبد">&times;</button>
           </header>
           <div class="sheet__body" id="cartBody"></div>
+          <p class="cart-ordering-notice" id="cartOrderingNotice" hidden>
+            سفارش آنلاین موقتاً غیرفعال است. سبد شما نگه داشته می‌شود تا وقتی دوباره فعال شود.
+          </p>
           <footer class="sheet__footer" id="cartFooter" hidden>
             <div class="sheet__total">
               <span>جمع کل</span>
@@ -172,9 +175,19 @@
     const fab = document.getElementById("cartFab");
     const fabCount = document.getElementById("cartFabCount");
     const total = document.getElementById("cartTotal");
+    const orderingNotice = document.getElementById("cartOrderingNotice");
+    const submitBtn = document.getElementById("cartSubmit");
+    const orderingEnabled =
+      !window.OrderingStatus || window.OrderingStatus.isEnabled();
 
     fab.hidden = state.count === 0;
     fabCount.textContent = toPersianDigitsOnly(state.count);
+
+    orderingNotice.hidden = orderingEnabled;
+    submitBtn.disabled = !orderingEnabled;
+    submitBtn.textContent = orderingEnabled
+      ? "ثبت سفارش"
+      : "سفارش آنلاین غیرفعال است";
 
     if (state.items.length === 0) {
       footer.hidden = true;
@@ -198,9 +211,9 @@
         </div>
         <div class="cart-item__controls">
           <div class="qty-stepper" role="group" aria-label="تعداد ${escapeHtml(item.name)}">
-            <button type="button" class="qty-stepper__btn" data-action="dec" aria-label="کم کردن">−</button>
+            <button type="button" class="qty-stepper__btn" data-action="dec" aria-label="کم کردن" ${orderingEnabled ? "" : "disabled"}>−</button>
             <span class="qty-stepper__count">${toPersianDigitsOnly(item.qty)}</span>
-            <button type="button" class="qty-stepper__btn" data-action="inc" aria-label="زیاد کردن">+</button>
+            <button type="button" class="qty-stepper__btn" data-action="inc" aria-label="زیاد کردن" ${orderingEnabled ? "" : "disabled"}>+</button>
           </div>
           <span class="cart-item__subtotal">${toPersianPrice(item.subtotal)}</span>
           <button type="button" class="cart-item__remove" data-action="remove" aria-label="حذف ${escapeHtml(item.name)}">
@@ -251,6 +264,7 @@
     buildDrawerMarkup();
     renderCartBody();
     subscribe(renderCartBody);
+    if (window.OrderingStatus) window.OrderingStatus.subscribe(renderCartBody);
     initDrawerEvents();
   }
 

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   DYLANCE — Checkout modal, order submission & live status tracking
+   BOBCAFE — Checkout modal, order submission & live status tracking
    ========================================================================== */
 (() => {
   "use strict";
@@ -143,6 +143,7 @@
 
   function openCheckout(cartState) {
     if (!cartState || cartState.items.length === 0) return;
+    if (window.OrderingStatus && !window.OrderingStatus.isEnabled()) return;
     currentCartState = cartState;
     renderSummary(cartState);
     document.getElementById("checkoutFormError").hidden = true;
@@ -239,8 +240,11 @@
       document.getElementById("checkoutForm").reset();
     } catch (err) {
       console.error("[Bobcafe] Order submission failed:", err);
-      formError.textContent =
-        "ثبت سفارش با مشکل مواجه شد. لطفاً دوباره تلاش کنید یا سفارش را به میزبان اطلاع دهید.";
+      const serverMessage =
+        err instanceof Error && err.message && !err.message.startsWith("HTTP ")
+          ? err.message
+          : "ثبت سفارش با مشکل مواجه شد. لطفاً دوباره تلاش کنید یا سفارش را به میزبان اطلاع دهید.";
+      formError.textContent = serverMessage;
       formError.hidden = false;
     } finally {
       submitBtn.disabled = false;

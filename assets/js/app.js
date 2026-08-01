@@ -369,10 +369,11 @@
   }
 
   // Every card that adds a cart-quantity control also subscribes to cart
-  // changes so it can re-render its own button/stepper. Since renderGrid()
-  // wipes and rebuilds the whole grid on every search/filter, those old
-  // subscriptions must be torn down each time — otherwise they'd pile up
-  // forever, quietly leaking a listener per card on every re-render.
+  // *and* online-ordering-status changes so it can re-render its own
+  // button/stepper/locked-state. Since renderGrid() wipes and rebuilds the
+  // whole grid on every search/filter, those old subscriptions must be
+  // torn down each time — otherwise they'd pile up forever, quietly
+  // leaking listeners per card on every re-render.
   let cartUnsubscribers = [];
 
   function renderGrid() {
@@ -483,18 +484,25 @@
     if (canAddToCart && window.Cart) {
       const qtyHost = card.querySelector(".card__qty");
       renderQtyControl(qtyHost, cartKey, item);
-      const unsubscribe = window.Cart.subscribe(() =>
+      const unsubscribeCart = window.Cart.subscribe(() =>
         renderQtyControl(qtyHost, cartKey, item),
       );
-      cartUnsubscribers.push(unsubscribe);
+      cartUnsubscribers.push(unsubscribeCart);
+      if (window.OrderingStatus) {
+        const unsubscribeOrdering = window.OrderingStatus.subscribe(() =>
+          renderQtyControl(qtyHost, cartKey, item),
+        );
+        cartUnsubscribers.push(unsubscribeOrdering);
+      }
     }
 
     return card;
   }
 
-  /** Render either a round "+" add button, or a −/count/+ stepper,
-   *  inside the given host element — matching the existing .card__mark
-   *  pill styling so no new visual language is introduced.
+  /** Render either a round "+" add button, a −/count/+ stepper, or (when
+   *  online ordering has been switched off from the admin panel) a locked
+   *  read-only pill — inside the given host element, matching the existing
+   *  .card__mark pill styling so no new visual language is introduced.
    *  Note: this also runs once *before* the card is inserted into the
    *  document (its first, synchronous call from createCard), so it must
    *  not require `host.isConnected` — only skip if the host is missing
@@ -502,6 +510,20 @@
   function renderQtyControl(host, cartKey, item) {
     if (!host) return;
     const qty = window.Cart.getQty(cartKey);
+    const orderingEnabled =
+      !window.OrderingStatus || window.OrderingStatus.isEnabled();
+
+    if (!orderingEnabled) {
+      host.innerHTML =
+        qty > 0
+          ? `<span class="card__mark card__mark--locked" aria-disabled="true" title="سفارش آنلاین موقتاً غیرفعال است">
+             <span class="card__mark--locked-count">${toPersianDigitsOnly(qty)}</span>
+           </span>`
+          : `<span class="card__mark card__mark--locked" aria-disabled="true" title="سفارش آنلاین موقتاً غیرفعال است">
+             <svg viewBox="0 0 24 24" width="14" height="14"><path d="M7 11V8a5 5 0 0 1 10 0v3M6 11h12v9H6z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+           </span>`;
+      return;
+    }
 
     if (qty <= 0) {
       host.innerHTML = `
