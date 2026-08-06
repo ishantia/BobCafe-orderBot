@@ -7,9 +7,23 @@
     "image": "coffee-espresso.webp"
   },
   {
+    "name": "اسپرسو بِلِند",
+    "description": "",
+    "price": 198000,
+    "category": "اسپرسو بار",
+    "image": "coffee-espresso.webp"
+  },
+  {
     "name": "آمریکانو",
     "description": "اسپرسو به همراه 120 میل آب داغ",
     "price": 240000,
+    "category": "اسپرسو بار",
+    "image": "coffee-americano.webp"
+  },
+  {
+    "name": "آمریکانو بِلِند",
+    "description": "",
+    "price": 208000,
     "category": "اسپرسو بار",
     "image": "coffee-americano.webp"
   },
@@ -373,30 +387,23 @@
   {
     "name": "اسموتی سانست",
     "description": "ترکیب توت فرنگی تازه، پشن فروت و مرکبات",
-    "price": 278000,
+    "price": 310000,
     "category": "اسموتی",
     "image": "smoothie-sunset.webp"
   },
   {
     "name": "اسموتی تروپیکال",
     "description": "ترکیب اناناس، نارگیل و میوه های استوایی",
-    "price": 288000,
+    "price": 340000,
     "category": "اسموتی",
     "image": "smoothie-tropical.webp"
   },
   {
     "name": "اسموتی رد دنس",
     "description": "ترکیب شاه توت، آلبالو و تمشک",
-    "price": 270000,
+    "price": 290000,
     "category": "اسموتی",
     "image": "smoothie-red-dance.webp"
-  },
-  {
-    "name": "اسموتی فصل",
-    "description": "ترکیب هندوانه، توت فرنگی، طالبی و نعناع",
-    "price": 250000,
-    "category": "اسموتی",
-    "image": "smoothie-season.webp"
   },
   {
     "name": "کیک شکلات",
